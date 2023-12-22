@@ -3,6 +3,14 @@ import sys
 import os
 
 
+def load_level(filename):
+    filename = "data/" + filename
+    with open(filename, 'r') as mapFile:
+        level_map = [line.strip() for line in mapFile]
+    max_width = max(map(len, level_map))
+    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
@@ -20,6 +28,7 @@ def load_image(name, colorkey=None):
     return image
 
 
+level_map = load_level(input("Выбрать уровень среди файлов - first_lvl.txt; second_lvl.txt; third_lvl.txt: "))
 pygame.init()
 size = WIDTH, HEIGHT = 500, 500
 screen = pygame.display.set_mode(size)
@@ -99,14 +108,6 @@ def start_screen():
         clock.tick(FPS)
 
 
-def load_level(filename):
-    filename = "data/" + filename
-    with open(filename, 'r') as mapFile:
-        level_map = [line.strip() for line in mapFile]
-    max_width = max(map(len, level_map))
-    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
-
-
 def generate_level(level):
     new_player, x, y = None, None, None
     for y in range(len(level)):
@@ -139,7 +140,6 @@ def move(hero, movement):
 
 
 start_screen()
-level_map = load_level('map.txt')
 hero, max_x, max_y = generate_level(level_map)
 
 while running:
